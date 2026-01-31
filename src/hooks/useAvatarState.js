@@ -1,0 +1,139 @@
+import { useState, useCallback } from 'react';
+import { CATEGORIES, HAIR_COLORS, SKIN_TONES, EXPRESSIONS, getHairAssets } from '../data/assets';
+
+// Initialize empty selections for all categories
+const getInitialSelections = () => {
+  const selections = {};
+  CATEGORIES.forEach(cat => {
+    selections[cat.id] = null;
+  });
+  return selections;
+};
+
+export function useAvatarState() {
+  const [selections, setSelections] = useState(getInitialSelections);
+  const [activeCategory, setActiveCategory] = useState(CATEGORIES[0].id);
+  const [hairColor, setHairColor] = useState('black'); // Default hair color
+  const [skinTone, setSkinTone] = useState('default'); // Default skin tone
+  const [expression, setExpression] = useState('basic'); // Default expression
+
+  // Select an item in a category (or deselect if same item clicked)
+  const selectItem = useCallback((categoryId, item) => {
+    setSelections(prev => ({
+      ...prev,
+      [categoryId]: prev[categoryId]?.id === item.id ? null : item,
+    }));
+  }, []);
+
+  // Handle hair color change - update the hair selection to use new color
+  const changeHairColor = useCallback((newColor) => {
+    setHairColor(newColor);
+    
+    // If there's a hair selected, update it to the new color variant
+    setSelections(prev => {
+      if (!prev.hair) return prev;
+      
+      // Find the style ID of the current hair
+      const currentStyleId = prev.hair.styleId;
+      if (!currentStyleId) return prev;
+      
+      // Get the new hair assets for the selected color
+      const newHairAssets = getHairAssets(newColor);
+      const newHairItem = newHairAssets.find(h => h.styleId === currentStyleId);
+      
+      if (newHairItem) {
+        return {
+          ...prev,
+          hair: newHairItem,
+        };
+      }
+      return prev;
+    });
+  }, []);
+
+  // Handle skin tone change
+  const changeSkinTone = useCallback((newTone) => {
+    setSkinTone(newTone);
+  }, []);
+
+  // Handle expression change
+  const changeExpression = useCallback((newExpression) => {
+    setExpression(newExpression);
+  }, []);
+
+  // Clear selection for a specific category
+  const clearCategory = useCallback((categoryId) => {
+    setSelections(prev => ({
+      ...prev,
+      [categoryId]: null,
+    }));
+  }, []);
+
+  // Reset all selections
+  const resetAll = useCallback(() => {
+    setSelections(getInitialSelections());
+    setHairColor('black');
+    setSkinTone('default');
+    setExpression('basic');
+  }, []);
+
+  // Randomize selections
+  const randomize = useCallback((assets) => {
+    const newSelections = {};
+    
+    // Randomize hair color first
+    const randomColorIndex = Math.floor(Math.random() * HAIR_COLORS.length);
+    const randomHairColor = HAIR_COLORS[randomColorIndex].id;
+    setHairColor(randomHairColor);
+    
+    // Randomize skin tone
+    const randomSkinIndex = Math.floor(Math.random() * SKIN_TONES.length);
+    const randomSkinTone = SKIN_TONES[randomSkinIndex].id;
+    setSkinTone(randomSkinTone);
+    
+    // Randomize expression
+    const randomExpressionIndex = Math.floor(Math.random() * EXPRESSIONS.length);
+    const randomExpression = EXPRESSIONS[randomExpressionIndex].id;
+    setExpression(randomExpression);
+    
+    CATEGORIES.forEach(cat => {
+      let categoryAssets;
+      
+      if (cat.id === 'hair') {
+        // Use dynamic hair assets based on random color
+        categoryAssets = getHairAssets(randomHairColor);
+      } else {
+        categoryAssets = assets[cat.id];
+      }
+      
+      if (categoryAssets && categoryAssets.length > 0) {
+        // 70% chance to select an item, 30% chance to leave empty
+        if (Math.random() > 0.3) {
+          const randomIndex = Math.floor(Math.random() * categoryAssets.length);
+          newSelections[cat.id] = categoryAssets[randomIndex];
+        } else {
+          newSelections[cat.id] = null;
+        }
+      } else {
+        newSelections[cat.id] = null;
+      }
+    });
+    setSelections(newSelections);
+  }, []);
+
+  return {
+    selections,
+    activeCategory,
+    setActiveCategory,
+    selectItem,
+    clearCategory,
+    resetAll,
+    randomize,
+    hairColor,
+    changeHairColor,
+    skinTone,
+    changeSkinTone,
+    expression,
+    changeExpression,
+  };
+}
