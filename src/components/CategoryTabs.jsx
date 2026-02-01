@@ -16,8 +16,11 @@ export function CategoryTabs({ activeCategory, onCategoryChange, selections }) {
             key={category.id}
             className={`category-tab ${isActive ? 'active' : ''} ${hasSelection ? 'has-selection' : ''} ${isLimited ? 'limited-tab' : ''}`}
             onClick={() => onCategoryChange(category.id)}
+            title={category.name}
           >
-            <span className="tab-icon">{category.icon}</span>
+            <span className="tab-icon">
+              <img src={category.iconFile} alt={category.name} className="tab-icon-svg" />
+            </span>
             <span className="tab-name">{category.name}</span>
             {hasSelection && <span className="selection-dot" />}
           </button>

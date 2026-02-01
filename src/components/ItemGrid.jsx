@@ -45,9 +45,7 @@ export function ItemGrid({
           )}
         </div>
         
-        <p className="limited-edition-subtitle">
-          Exclusive character costumes that transform your Qbit
-        </p>
+        <hr className="limited-edition-divider" />
         
         {LIMITED_COLLECTIONS.map(collection => (
           <div key={collection.id} className="collection-section">

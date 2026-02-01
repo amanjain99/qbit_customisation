@@ -25,14 +25,46 @@ function App() {
 
   return (
     <div className="app">
-      <header className="app-header">
-        <h1 className="app-title">
-          <span className="title-highlight">Qbit</span> Avatar Studio
-        </h1>
-        <p className="app-subtitle">Create your unique character</p>
-      </header>
-
+      {/* Animated blob background */}
+      <div className="blob-container">
+        <div className="blob blob-red"></div>
+        <div className="blob blob-yellow"></div>
+        <div className="blob-blue-layer"></div>
+        {/* Particle effects */}
+        <div className="particles">
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+        </div>
+      </div>
       <main className="app-main">
+        <aside className="editor-panel">
+          <CategoryTabs 
+            activeCategory={activeCategory}
+            onCategoryChange={setActiveCategory}
+            selections={selections}
+          />
+          <section className="customization-section">
+            <ItemGrid 
+              activeCategory={activeCategory}
+              selections={selections}
+              onSelectItem={selectItem}
+              onClearCategory={clearCategory}
+              hairColor={hairColor}
+              onHairColorChange={changeHairColor}
+              skinTone={skinTone}
+              onSkinToneChange={changeSkinTone}
+              expression={expression}
+              onExpressionChange={changeExpression}
+            />
+          </section>
+        </aside>
+
         <section className="preview-section">
           <AvatarPreview 
             selections={selections}
@@ -42,31 +74,7 @@ function App() {
             expression={expression}
           />
         </section>
-
-        <section className="customization-section">
-          <CategoryTabs 
-            activeCategory={activeCategory}
-            onCategoryChange={setActiveCategory}
-            selections={selections}
-          />
-          <ItemGrid 
-            activeCategory={activeCategory}
-            selections={selections}
-            onSelectItem={selectItem}
-            onClearCategory={clearCategory}
-            hairColor={hairColor}
-            onHairColorChange={changeHairColor}
-            skinTone={skinTone}
-            onSkinToneChange={changeSkinTone}
-            expression={expression}
-            onExpressionChange={changeExpression}
-          />
-        </section>
       </main>
-
-      <footer className="app-footer">
-        <p>Click an item to equip • Click again to remove</p>
-      </footer>
     </div>
   );
 }

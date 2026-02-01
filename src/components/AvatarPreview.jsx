@@ -12,7 +12,7 @@ const EXPRESSION_ID_MAP = {
   'happy': 'happyhead',
 };
 
-export function AvatarPreview({ selections, onReset, onRandomize, skinTone, expression }) {
+export function AvatarPreview({ selections, onRandomize, skinTone, expression }) {
   const avatarRef = useRef(null);
   const hasFullCostume = selections.fullCostume !== null;
   const expressionKey = EXPRESSION_ID_MAP[expression] || 'basic';
@@ -39,8 +39,9 @@ export function AvatarPreview({ selections, onReset, onRandomize, skinTone, expr
 
   return (
     <div className="avatar-preview-container">
-      <div className="avatar-frame">
-        <div className="avatar-canvas" ref={avatarRef}>
+      <div className="avatar-wrapper">
+        <div className="avatar-frame">
+          <div className="avatar-canvas" ref={avatarRef}>
           {/* If a full costume is selected, render only the costume with skin tone base */}
           {hasFullCostume ? (
             <>
@@ -104,22 +105,17 @@ export function AvatarPreview({ selections, onReset, onRandomize, skinTone, expr
               })}
             </>
           )}
+          </div>
         </div>
-      </div>
-      
-      <div className="avatar-actions">
-        <button className="action-btn randomize-btn" onClick={onRandomize}>
-          <span className="btn-icon">🎲</span>
-          Randomize
-        </button>
-        <button className="action-btn reset-btn" onClick={onReset}>
-          <span className="btn-icon">↺</span>
-          Reset
-        </button>
-        <button className="action-btn export-btn" onClick={handleExport}>
-          <span className="btn-icon">⬇</span>
-          Download
-        </button>
+        
+        <div className="avatar-actions">
+          <button className="action-btn randomize-btn" onClick={onRandomize} title="Randomize">
+            <span className="btn-icon">🎲</span>
+          </button>
+          <button className="action-btn export-btn" onClick={handleExport} title="Download">
+            <span className="btn-icon">⬇</span>
+          </button>
+        </div>
       </div>
     </div>
   );

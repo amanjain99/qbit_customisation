@@ -2,15 +2,15 @@
 // Each item has: id, name (display), file path
 
 export const CATEGORIES = [
-  { id: 'limited', name: 'Limited Edition', icon: '⭐' },
-  { id: 'skin', name: 'Skin', icon: '🎨' },
-  { id: 'hair', name: 'Hair', icon: '💇' },
-  { id: 'headgear', name: 'Headgear', icon: '🎩' },
-  { id: 'accessories', name: 'Accessories', icon: '✨' },
-  { id: 'topwear', name: 'Topwear', icon: '👕' },
-  { id: 'bottomwear', name: 'Bottomwear', icon: '👖' },
-  { id: 'shoes', name: 'Shoes', icon: '👟' },
-  { id: 'backpack', name: 'Backpack', icon: '🎒' },
+  { id: 'limited', name: 'Limited Edition', iconFile: '/tab-icons/limited edition.svg' },
+  { id: 'skin', name: 'Skin', iconFile: '/tab-icons/skin.svg' },
+  { id: 'hair', name: 'Hair', iconFile: '/tab-icons/hair.svg' },
+  { id: 'headgear', name: 'Headgear', iconFile: '/tab-icons/headgear.svg' },
+  { id: 'accessories', name: 'Accessories', iconFile: '/tab-icons/accessories.svg' },
+  { id: 'topwear', name: 'Topwear', iconFile: '/tab-icons/topwear.svg' },
+  { id: 'bottomwear', name: 'Bottomwear', iconFile: '/tab-icons/bottomwear.svg' },
+  { id: 'shoes', name: 'Shoes', iconFile: '/tab-icons/shoes.svg' },
+  { id: 'backpack', name: 'Backpack', iconFile: '/tab-icons/backpack.svg' },
 ];
 
 // Limited Edition Collections
