@@ -5,12 +5,16 @@ export function CategoryTabs({ activeCategory, onCategoryChange, selections }) {
     <div className="category-tabs">
       {CATEGORIES.map(category => {
         const isActive = activeCategory === category.id;
-        const hasSelection = selections[category.id] !== null;
+        // Check for full costume selection for limited category
+        const hasSelection = category.id === 'limited' 
+          ? selections.fullCostume !== null 
+          : selections[category.id] !== null;
+        const isLimited = category.id === 'limited';
         
         return (
           <button
             key={category.id}
-            className={`category-tab ${isActive ? 'active' : ''} ${hasSelection ? 'has-selection' : ''}`}
+            className={`category-tab ${isActive ? 'active' : ''} ${hasSelection ? 'has-selection' : ''} ${isLimited ? 'limited-tab' : ''}`}
             onClick={() => onCategoryChange(category.id)}
           >
             <span className="tab-icon">{category.icon}</span>

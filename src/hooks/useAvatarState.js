@@ -7,6 +7,8 @@ const getInitialSelections = () => {
   CATEGORIES.forEach(cat => {
     selections[cat.id] = null;
   });
+  // Add fullCostume field for limited edition costumes
+  selections.fullCostume = null;
   return selections;
 };
 
@@ -19,10 +21,34 @@ export function useAvatarState() {
 
   // Select an item in a category (or deselect if same item clicked)
   const selectItem = useCallback((categoryId, item) => {
-    setSelections(prev => ({
-      ...prev,
-      [categoryId]: prev[categoryId]?.id === item.id ? null : item,
-    }));
+    setSelections(prev => {
+      // Handle full costume selection (limited edition)
+      if (item.isFullCostume) {
+        // If clicking the same costume, deselect it
+        if (prev.fullCostume?.id === item.id) {
+          return {
+            ...prev,
+            fullCostume: null,
+          };
+        }
+        // Clear all other selections but keep skin category (only affects tone selector)
+        const clearedSelections = {};
+        CATEGORIES.forEach(cat => {
+          clearedSelections[cat.id] = null;
+        });
+        return {
+          ...clearedSelections,
+          fullCostume: item,
+        };
+      }
+      
+      // If selecting a regular item, clear the full costume
+      return {
+        ...prev,
+        fullCostume: null,
+        [categoryId]: prev[categoryId]?.id === item.id ? null : item,
+      };
+    });
   }, []);
 
   // Handle hair color change - update the hair selection to use new color
@@ -71,7 +97,9 @@ export function useAvatarState() {
 
   // Reset all selections
   const resetAll = useCallback(() => {
-    setSelections(getInitialSelections());
+    const initial = getInitialSelections();
+    initial.fullCostume = null;
+    setSelections(initial);
     setHairColor('black');
     setSkinTone('default');
     setExpression('basic');
@@ -79,7 +107,7 @@ export function useAvatarState() {
 
   // Randomize selections
   const randomize = useCallback((assets) => {
-    const newSelections = {};
+    const newSelections = { fullCostume: null };
     
     // Randomize hair color first
     const randomColorIndex = Math.floor(Math.random() * HAIR_COLORS.length);
@@ -97,6 +125,12 @@ export function useAvatarState() {
     setExpression(randomExpression);
     
     CATEGORIES.forEach(cat => {
+      // Skip limited edition category for randomization
+      if (cat.id === 'limited') {
+        newSelections[cat.id] = null;
+        return;
+      }
+      
       let categoryAssets;
       
       if (cat.id === 'hair') {

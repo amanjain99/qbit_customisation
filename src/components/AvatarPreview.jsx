@@ -1,10 +1,21 @@
 import { useRef, useCallback } from 'react';
 import html2canvas from 'html2canvas';
-import { LAYER_ORDER, EXPRESSIONS } from '../data/assets';
+import { LAYER_ORDER } from '../data/assets';
 import { QbitBaseSVG } from './QbitBaseSVG';
+import { ExpressionSVG } from './ExpressionSVG';
+
+// Map expression ids to ExpressionSVG expression keys
+const EXPRESSION_ID_MAP = {
+  'basic': 'basic',
+  'chibi': 'chibihead',
+  'surprise': 'surprisehead',
+  'happy': 'happyhead',
+};
 
 export function AvatarPreview({ selections, onReset, onRandomize, skinTone, expression }) {
   const avatarRef = useRef(null);
+  const hasFullCostume = selections.fullCostume !== null;
+  const expressionKey = EXPRESSION_ID_MAP[expression] || 'basic';
 
   const handleExport = useCallback(async () => {
     if (!avatarRef.current) return;
@@ -30,50 +41,69 @@ export function AvatarPreview({ selections, onReset, onRandomize, skinTone, expr
     <div className="avatar-preview-container">
       <div className="avatar-frame">
         <div className="avatar-canvas" ref={avatarRef}>
-          {/* Backpack layer - behind base avatar */}
-          {selections.backpack && (
-            <img
-              src={selections.backpack.file}
-              alt={selections.backpack.name}
-              className="avatar-layer"
-              style={{ zIndex: 0 }}
-              draggable={false}
-            />
-          )}
-          
-          {/* Base avatar body - always visible with dynamic skin tone */}
-          <div className="avatar-layer base-layer" style={{ zIndex: 1 }}>
-            <QbitBaseSVG skinTone={skinTone} />
-          </div>
-          
-          {/* Expression face - rendered as separate layer on top of body */}
-          {expression && (
-            <img
-              key={`expression-${expression}`}
-              src={EXPRESSIONS.find(e => e.id === expression)?.file || '/assets/expressions/basic.svg'}
-              alt="Expression"
-              className="avatar-layer expression-layer"
-              style={{ zIndex: 2 }}
-              draggable={false}
-            />
-          )}
-          
-          {/* Render other layers in order (excluding backpack) */}
-          {LAYER_ORDER.filter(id => id !== 'backpack').map((categoryId, index) => {
-            const selected = selections[categoryId];
-            if (!selected) return null;
-            
-            return (
+          {/* If a full costume is selected, render only the costume with skin tone base */}
+          {hasFullCostume ? (
+            <>
+              {/* Base body (without head) - dynamic skin tone */}
+              <div className="avatar-layer base-layer" style={{ zIndex: 1 }}>
+                <QbitBaseSVG skinTone={skinTone} includeHead={false} />
+              </div>
+              
+              {/* Expression/Face layer - dynamic skin tone and expression */}
+              <div className="avatar-layer expression-layer" style={{ zIndex: 2 }}>
+                <ExpressionSVG expressionId={expressionKey} skinTone={skinTone} />
+              </div>
+              
+              {/* Full costume layer - covers everything except face */}
               <img
-                key={categoryId}
-                src={selected.file}
-                alt={selected.name}
-                className="avatar-layer"
-                style={{ zIndex: index + 3 }}
+                src={selections.fullCostume.file}
+                alt={selections.fullCostume.name}
+                className="avatar-layer full-costume-layer"
+                style={{ zIndex: 10 }}
                 draggable={false}
               />
-            );
-          })}
+            </>
+          ) : (
+            <>
+              {/* Backpack layer - behind base avatar */}
+              {selections.backpack && (
+                <img
+                  src={selections.backpack.file}
+                  alt={selections.backpack.name}
+                  className="avatar-layer"
+                  style={{ zIndex: 0 }}
+                  draggable={false}
+                />
+              )}
+              
+              {/* Base body (without head) - dynamic skin tone */}
+              <div className="avatar-layer base-layer" style={{ zIndex: 1 }}>
+                <QbitBaseSVG skinTone={skinTone} includeHead={false} />
+              </div>
+              
+              {/* Expression/Face layer - dynamic skin tone and expression */}
+              <div className="avatar-layer expression-layer" style={{ zIndex: 2 }}>
+                <ExpressionSVG expressionId={expressionKey} skinTone={skinTone} />
+              </div>
+              
+              {/* Render other layers in order (excluding backpack) */}
+              {LAYER_ORDER.filter(id => id !== 'backpack').map((categoryId, index) => {
+                const selected = selections[categoryId];
+                if (!selected) return null;
+                
+                return (
+                  <img
+                    key={categoryId}
+                    src={selected.file}
+                    alt={selected.name}
+                    className="avatar-layer"
+                    style={{ zIndex: index + 3 }}
+                    draggable={false}
+                  />
+                );
+              })}
+            </>
+          )}
         </div>
       </div>
       
