@@ -53,6 +53,12 @@ export function ItemCard({ item, isSelected, onSelect }) {
         />
       </div>
       <span className="item-name">{item.name}</span>
+      {item.price !== undefined && (
+        <span className="item-price">
+          <span className="price-icon">💎</span>
+          {item.price.toLocaleString()}
+        </span>
+      )}
       {isSelected && (
         <div className="selected-check">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">

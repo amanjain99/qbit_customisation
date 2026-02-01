@@ -18,6 +18,7 @@ export function useAvatarState() {
   const [hairColor, setHairColor] = useState('black'); // Default hair color
   const [skinTone, setSkinTone] = useState('default'); // Default skin tone
   const [expression, setExpression] = useState('basic'); // Default expression
+  const [purchasedItems, setPurchasedItems] = useState(new Set()); // Track purchased item IDs
 
   // Select an item in a category (or deselect if same item clicked)
   const selectItem = useCallback((categoryId, item) => {
@@ -85,6 +86,15 @@ export function useAvatarState() {
   // Handle expression change
   const changeExpression = useCallback((newExpression) => {
     setExpression(newExpression);
+  }, []);
+
+  // Purchase an item (mark as owned)
+  const purchaseItem = useCallback((item) => {
+    setPurchasedItems(prev => {
+      const newSet = new Set(prev);
+      newSet.add(item.id);
+      return newSet;
+    });
   }, []);
 
   // Clear selection for a specific category
@@ -169,5 +179,7 @@ export function useAvatarState() {
     changeSkinTone,
     expression,
     changeExpression,
+    purchasedItems,
+    purchaseItem,
   };
 }

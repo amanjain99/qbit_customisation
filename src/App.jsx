@@ -1,6 +1,7 @@
 import { AvatarPreview } from './components/AvatarPreview';
 import { CategoryTabs } from './components/CategoryTabs';
 import { ItemGrid } from './components/ItemGrid';
+import { AdCarousel } from './components/AdCarousel';
 import { useAvatarState } from './hooks/useAvatarState';
 import { ASSETS } from './data/assets';
 
@@ -19,6 +20,8 @@ function App() {
     changeSkinTone,
     expression,
     changeExpression,
+    purchasedItems,
+    purchaseItem,
   } = useAvatarState();
 
   const handleRandomize = () => randomize(ASSETS);
@@ -66,6 +69,10 @@ function App() {
         </aside>
 
         <section className="preview-section">
+          <AdCarousel
+            onPurchase={purchaseItem}
+            onApply={selectItem}
+          />
           <AvatarPreview 
             selections={selections}
             onReset={resetAll}

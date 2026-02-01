@@ -45,6 +45,13 @@ export function CostumeCard({ item, isSelected, onSelect }) {
         )}
       </div>
       
+      <span className="costume-name">{item.name}</span>
+      {item.price !== undefined && (
+        <span className="costume-price">
+          <span className="price-icon">💎</span>
+          {item.price.toLocaleString()}
+        </span>
+      )}
     </button>
   );
 }
