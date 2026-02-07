@@ -38,11 +38,19 @@ export function ItemGrid({
             <span className="title-icon">{categoryInfo?.icon}</span>
             {categoryInfo?.name}
           </h2>
-          {selectedCostume && (
-            <button className="clear-btn" onClick={() => onSelectItem('limited', selectedCostume)}>
-              Remove Costume
-            </button>
-          )}
+          <div className="grid-header-right">
+            <span 
+              className="collection-badge" 
+              style={{ background: LIMITED_COLLECTIONS[0]?.badgeColor }}
+            >
+              {LIMITED_COLLECTIONS[0]?.badge}
+            </span>
+            {selectedCostume && (
+              <button className="clear-btn" onClick={() => onSelectItem('limited', selectedCostume)}>
+                Remove Costume
+              </button>
+            )}
+          </div>
         </div>
         
         <hr className="limited-edition-divider" />
@@ -50,13 +58,17 @@ export function ItemGrid({
         {LIMITED_COLLECTIONS.map(collection => (
           <div key={collection.id} className="collection-section">
             <div className="collection-header">
-              <h3 className="collection-title">{collection.name}</h3>
-              <span 
-                className="collection-badge" 
-                style={{ background: collection.badgeColor }}
-              >
-                {collection.badge}
-              </span>
+              <h3 className="collection-title">
+                {collection.id === 'stranger-things' ? (
+                  <img 
+                    src="/assets/limited-edition/stranger-things/strangerqbits_logo.png" 
+                    alt="Stranger QBits"
+                    className="collection-logo"
+                  />
+                ) : (
+                  collection.name
+                )}
+              </h3>
             </div>
             <p className="collection-description">{collection.description}</p>
             

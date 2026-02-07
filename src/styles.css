@@ -880,6 +880,12 @@ body::before {
   margin-left: -12px;
 }
 
+.grid-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .grid-title {
   display: flex;
   align-items: center;
@@ -1180,6 +1186,12 @@ body::before {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.collection-logo {
+  height: 64px;
+  width: auto;
+  display: block;
 }
 
 .collection-badge {
