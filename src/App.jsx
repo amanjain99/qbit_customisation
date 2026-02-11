@@ -79,6 +79,7 @@ function App() {
             onRandomize={handleRandomize}
             skinTone={skinTone}
             expression={expression}
+            activeCategory={activeCategory}
           />
         </section>
       </main>

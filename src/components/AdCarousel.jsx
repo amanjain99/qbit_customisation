@@ -91,7 +91,7 @@ export function AdCarousel({ onPurchase, onApply }) {
               className="ad-btn ad-btn-price"
               onClick={() => handlePurchase(currentItem)}
             >
-              <span className="ad-diamond">💎</span>
+              <img src="/assets/coin/image.png" alt="coin" className="ad-coin-icon" draggable={false} />
               {currentItem.price.toLocaleString()}
             </button>
           </div>

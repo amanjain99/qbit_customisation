@@ -12,10 +12,17 @@ const EXPRESSION_ID_MAP = {
   'happy': 'happyhead',
 };
 
-export function AvatarPreview({ selections, onRandomize, skinTone, expression }) {
+export function AvatarPreview({ selections, onRandomize, skinTone, expression, activeCategory }) {
   const avatarRef = useRef(null);
   const hasFullCostume = selections.fullCostume !== null;
   const expressionKey = EXPRESSION_ID_MAP[expression] || 'basic';
+
+  // Zoom into head area when headgear or hair category is active
+  // Scale up and shift down so the head is prominent and body clips off the bottom
+  const isHeadZoom = activeCategory === 'headgear' || activeCategory === 'hair';
+  const zoomStyle = isHeadZoom
+    ? { transform: 'scale(1.2) translateY(24%)' }
+    : {};
 
   const handleExport = useCallback(async () => {
     if (!avatarRef.current) return;
@@ -38,9 +45,10 @@ export function AvatarPreview({ selections, onRandomize, skinTone, expression })
   }, []);
 
   return (
-    <div className="avatar-preview-container">
+    <div className={`avatar-preview-container ${isHeadZoom ? 'headgear-zoom' : ''}`}>
       <div className="avatar-wrapper">
         <div className="avatar-frame">
+          <div className="avatar-zoom-wrapper" style={zoomStyle}>
           <div className="avatar-canvas" ref={avatarRef}>
           {/* If a full costume is selected, render only the costume with skin tone base */}
           {hasFullCostume ? (
@@ -105,6 +113,7 @@ export function AvatarPreview({ selections, onRandomize, skinTone, expression })
               })}
             </>
           )}
+          </div>
           </div>
         </div>
         

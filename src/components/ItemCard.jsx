@@ -55,7 +55,7 @@ export function ItemCard({ item, isSelected, onSelect }) {
       <span className="item-name">{item.name}</span>
       {item.price !== undefined && (
         <span className="item-price">
-          <span className="price-icon">💎</span>
+          <img src="/assets/coin/image.png" alt="coin" className="price-icon-img" draggable={false} />
           {item.price.toLocaleString()}
         </span>
       )}

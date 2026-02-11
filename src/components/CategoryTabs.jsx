@@ -1,6 +1,14 @@
 import { CATEGORIES } from '../data/assets';
+import { useSFX } from '../hooks/useSFX';
 
 export function CategoryTabs({ activeCategory, onCategoryChange, selections }) {
+  const { playTabSound } = useSFX();
+
+  const handleTabClick = (categoryId) => {
+    playTabSound(categoryId);
+    onCategoryChange(categoryId);
+  };
+
   return (
     <div className="category-tabs">
       {CATEGORIES.map(category => {
@@ -15,7 +23,7 @@ export function CategoryTabs({ activeCategory, onCategoryChange, selections }) {
           <button
             key={category.id}
             className={`category-tab ${isActive ? 'active' : ''} ${hasSelection ? 'has-selection' : ''} ${isLimited ? 'limited-tab' : ''}`}
-            onClick={() => onCategoryChange(category.id)}
+            onClick={() => handleTabClick(category.id)}
             title={category.name}
           >
             <span className="tab-icon">
